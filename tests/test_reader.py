@@ -23,7 +23,7 @@ def test_reader_init(reader):
     assert reader.filepath == test_file_path
 
 def test_reader_parse_comments(reader, expected_meta):
-    comments = reader.parse_comments()
+    comments = reader._parse_comments()
     assert comments == expected_meta
 
 def test_reader_read(reader, expected_meta):

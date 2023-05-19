@@ -2,32 +2,64 @@ import re
 import pandas as pd
 from datetime import datetime
 from .workload import Workload
+from typing import Dict, Union
 
 class Reader:
-    def __init__(self, filepath):
+    """
+    A class to read SWF workload files.
+
+    Attributes
+    ----------
+    filepath : str
+        The path to the SWF workload file.
+
+    Methods
+    -------
+    read() -> Workload:
+        Reads the SWF workload file and returns a Workload object.
+    _parse_comments() -> Dict[str, any]:
+        Parses the comments in the SWF workload file and returns a dictionary of metadata.
+
+    """
+
+    def __init__(self, filepath: str):
+        """
+        Parameters
+        ----------
+        filepath : str
+            The path to the SWF workload file.
+        """
         self.filepath = filepath
 
-    def read(self):
-        # Define column names (job attributes)
+    def read(self) -> Workload:
+        """
+        Reads the SWF workload file and returns a Workload object.
+
+        Returns
+        -------
+        Workload
+            A Workload object containing the parsed data.
+        """
         column_names = ["job_number", "submit_time", "wait_time", "run_time", "num_processors", 
                         "avg_cpu_time_used", "used_memory", "req_num_processors", "req_time", 
                         "req_memory", "status", "user_id", "group_id", "exec_number", 
                         "queue_number", "partition_number", "preceding_job_number", 
                         "think_time_from_preceding_job"]
-
-        # Create a Workload object to store the data
         workload = Workload()
-
-        # Parse some useful comments
-        workload.meta = self.parse_comments()
-
-        # Read the SWF file into a DataFrame
+        workload.meta = self._parse_comments()
         workload.jobs = pd.read_csv(self.filepath, comment=';', delim_whitespace=True, 
                                     header=None, names=column_names)
-
         return workload
-    
-    def parse_comments(self):
+
+    def _parse_comments(self) -> Dict[str, Union[str, int, datetime]]:
+        """
+        Parses the comments in the SWF workload file and returns a dictionary of metadata.
+
+        Returns
+        -------
+        Dict[str, Union[str, int, datetime]]
+            A dictionary containing the metadata parsed from the comments.
+        """
         comments_data = {}
 
         # Define the patterns to look for
