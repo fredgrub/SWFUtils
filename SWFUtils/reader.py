@@ -2,7 +2,6 @@ import re
 import pandas as pd
 from datetime import datetime
 from .workload import Workload
-from typing import Dict, Union
 
 class Reader:
     """
@@ -15,14 +14,11 @@ class Reader:
 
     Methods
     -------
-    read() -> Workload:
+    read():
         Reads the SWF workload file and returns a Workload object.
-    _parse_comments() -> Dict[str, any]:
-        Parses the comments in the SWF workload file and returns a dictionary of metadata.
-
     """
 
-    def __init__(self, filepath: str):
+    def __init__(self, filepath):
         """
         Parameters
         ----------
@@ -31,7 +27,7 @@ class Reader:
         """
         self.filepath = filepath
 
-    def read(self) -> Workload:
+    def read(self):
         """
         Reads the SWF workload file and returns a Workload object.
 
@@ -51,13 +47,13 @@ class Reader:
                                     header=None, names=column_names)
         return workload
 
-    def _parse_comments(self) -> Dict[str, Union[str, int, datetime]]:
+    def _parse_comments(self):
         """
         Parses the comments in the SWF workload file and returns a dictionary of metadata.
 
         Returns
         -------
-        Dict[str, Union[str, int, datetime]]
+        dict
             A dictionary containing the metadata parsed from the comments.
         """
         comments_data = {}
