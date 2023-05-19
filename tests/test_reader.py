@@ -1,6 +1,5 @@
 import os
 import pytest
-from datetime import datetime
 from SWFUtils.reader import Reader
 
 @pytest.fixture
@@ -11,7 +10,7 @@ def reader():
 @pytest.fixture
 def expected_meta():
     return {
-        'UnixStartTime': datetime.fromtimestamp(1609459200),
+        'UnixStartTime': 1609459200,
         'TimeZoneString': 'Europe/London',
         'MaxJobs': 15,
         'MaxProcs': 4,

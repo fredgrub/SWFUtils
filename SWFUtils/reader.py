@@ -1,6 +1,5 @@
 import re
 import pandas as pd
-from datetime import datetime
 from .workload import Workload
 
 class Reader:
@@ -69,7 +68,7 @@ class Reader:
 
         # Map keys to their appropriate parser function
         parsers = {
-            "UnixStartTime": lambda timestamp: datetime.fromtimestamp(int(timestamp)),
+            "UnixStartTime": int,
             "TimeZoneString": str,
             "MaxJobs": int,
             "MaxProcs": int,

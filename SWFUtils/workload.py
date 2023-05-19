@@ -18,3 +18,25 @@ class Workload:
         """
         self.meta = {}
         self.jobs = pd.DataFrame()
+
+    def populate(self, metadata, jobs):
+        """
+        Populates the Workload object with data.
+
+        Parameters
+        ----------
+        metadata : dict
+            A dictionary containing specific metadata about the workload.
+        jobs : pandas.DataFrame
+            A DataFrame containing the job data.
+        
+        Raises
+        ------
+        ValueError
+            If the Workload object is not empty.
+        """
+        if bool(self.meta) or not self.jobs.empty:
+            raise ValueError("Cannot populate non-empty Workload instance.")
+        else:
+            self.meta = metadata
+            self.jobs = jobs
