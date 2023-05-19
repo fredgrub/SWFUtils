@@ -1,12 +1,16 @@
 import os
+import pytest
 from datetime import datetime
 from SWFUtils.reader import Reader
 
-def test_reader():
+@pytest.fixture
+def reader():
     test_file_path = os.path.join(os.path.dirname(__file__), "data/dummy_workload.swf")
-    reader = Reader(test_file_path)
+    return Reader(test_file_path)
 
-    expected_meta = {
+@pytest.fixture
+def expected_meta():
+    return {
         'UnixStartTime': datetime.fromtimestamp(1609459200),
         'TimeZoneString': 'Europe/London',
         'MaxJobs': 15,
@@ -14,9 +18,15 @@ def test_reader():
         'MaxNodes': 4,
     }
 
+def test_reader_init(reader):
+    test_file_path = os.path.join(os.path.dirname(__file__), "data/dummy_workload.swf")
+    assert reader.filepath == test_file_path
+
+def test_reader_parse_comments(reader, expected_meta):
     comments = reader.parse_comments()
     assert comments == expected_meta
 
+def test_reader_read(reader, expected_meta):
     workload = reader.read()
     assert workload.meta == expected_meta
     assert workload.jobs.shape == (expected_meta['MaxJobs'], 18)
